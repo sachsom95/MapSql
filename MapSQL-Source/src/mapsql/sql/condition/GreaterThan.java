@@ -18,7 +18,9 @@ public class GreaterThan extends AbstractCondition {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean evaluate(TableDescription description, Map<String, String> data) throws SQLException {
-		return false;
+		System.out.println(description.name());
+		Field field = description.findField(column);
+		return comparator.compare(field.toValue(data.get(column)), field.toValue(value)) == 1;
 	}
 
 }

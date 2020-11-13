@@ -7,6 +7,9 @@ import mapsql.sql.core.SQLException;
 import mapsql.sql.core.TableDescription;
 import mapsql.sql.field.CHARACTER;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class Like extends AbstractCondition {
 	private String column;
 	private String value;
@@ -35,8 +38,9 @@ public class Like extends AbstractCondition {
 	private boolean wildcard_processor(String wild_token,String field_value){
 		int len = wild_token.length();
 		boolean result = false;
-		if(wild_token.charAt(0) =='%')
+		if(wild_token.charAt(0) =='%' && !(wild_token.charAt(len-1) =='%'))
 		{
+//			Wildcard Implementation of %XXXX
 			System.out.println("came to begining");
 			System.out.println(wild_token.substring(wild_token.indexOf('%')+1));
 			System.out.println(field_value.substring(field_value.length()-len+1));
@@ -46,11 +50,12 @@ public class Like extends AbstractCondition {
 							field_value.substring(field_value.length()-len+1)
 					);
 		}
-		else if(wild_token.charAt(len-1) == '%')
+		else if(!(wild_token.charAt(0) =='%') && wild_token.charAt(len-1) == '%')
 		{
-			System.out.println("At the end");
-			System.out.println(wild_token.substring(0,wild_token.indexOf('%')));
-			System.out.println(field_value.substring(0,field_value.length()));
+//			Wildcard implementation of XXXX%
+//			System.out.println("At the end");
+//			System.out.println(wild_token.substring(0,wild_token.indexOf('%')));
+//			System.out.println(field_value.substring(0,field_value.length()));
 			System.out.println("chopped:"+ field_value.substring(0,wild_token.substring(0,wild_token.indexOf('%')).length()));
 
 			result = wild_token.substring(0,wild_token.indexOf('%')).equals
@@ -60,7 +65,15 @@ public class Like extends AbstractCondition {
 		}
 		else if ((wild_token.charAt(len-1) == '%') &&(wild_token.charAt(0) =='%') )
 		{
-			System.out.println("111");
+			System.out.println("Came to final wildcard");
+			wild_token =wild_token.substring(1,wild_token.length()-1);
+			System.out.println("wild_token: "+wild_token);
+			System.out.println("filed value: "+field_value);
+			Pattern p = Pattern.compile(wild_token);
+			Matcher m = p.matcher(field_value);
+			result = m.find();
+			System.out.println("regex:"+ result);
+
 		}
 
 		return result;

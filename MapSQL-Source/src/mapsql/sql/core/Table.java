@@ -58,7 +58,33 @@ public class Table {
 	}
 
 	public void update(String[] columns, String[] values, Condition where) throws SQLException {
-	}
+//		List<Row> list = new LinkedList<Row>();
+//
+//		System.out.println("columns"+ columns);
+//		System.out.println("values"+ values);
+//		System.out.println("where"+ where);
+//		System.out.println("List"+ select(where));
+//		list = select(where);
+//		System.out.println(list.getClass());
+//		for(String x:columns){
+//			System.out.println(x);
+//		}
+
+
+		for (Row row : rows) {
+			if (row.satisfies(where, description)) {
+				System.out.println(row);
+				int i = 0;
+				for (String column : columns) {
+					System.out.println(row.get(column));
+					row.get(column);
+					row.data.put(column,values[i]);
+					i++;
+				}
+			}
+		}
+
+		}
 	
 	public void delete(Condition where) throws SQLException {
 	}

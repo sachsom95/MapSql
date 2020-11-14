@@ -87,5 +87,19 @@ public class Table {
 		}
 	
 	public void delete(Condition where) throws SQLException {
+		System.out.println("Printing Rows linkedlist:");
+//		    public Position<T> first();
+		Position<Row> pointer = rows.first();
+		for (Row row:rows){
+			System.out.println(row.data.values());
+			if (row.satisfies(where, description)) {
+//				public T remove(Position<T> p);
+
+				rows.remove(pointer);
+			}else{
+//				    public Position<T> next(Position<T> p);
+				pointer =rows.next(pointer);
+			}
+		}
+		}
 	}
-}

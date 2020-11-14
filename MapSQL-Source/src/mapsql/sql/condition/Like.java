@@ -23,13 +23,8 @@ public class Like extends AbstractCondition {
 	@Override
 	public boolean evaluate(TableDescription description, Map<String, String> data) throws SQLException {
 		Field field = description.findField(column);
-		System.out.println("came to LIKE:");
-		System.out.println("field.toValue(data.get(column)): "+field.toValue(data.get(column)));
-		System.out.println("field.toValue(value): "+field.toValue(value));
-
 		String field_value = (String)field.toValue(data.get(column));
 		String wildcard = (String)field.toValue(value);
-
 		System.out.println("Wildcard:"+wildcard);
 		return wildcard_processor(wildcard,field_value);
 	}
@@ -41,9 +36,7 @@ public class Like extends AbstractCondition {
 		if(wild_token.charAt(0) =='%' && !(wild_token.charAt(len-1) =='%'))
 		{
 //			Wildcard Implementation of %XXXX
-			System.out.println("came to begining");
-			System.out.println(wild_token.substring(wild_token.indexOf('%')+1));
-			System.out.println(field_value.substring(field_value.length()-len+1));
+
 
 			 result = wild_token.substring(wild_token.indexOf('%')+1).equals
 					(
@@ -53,10 +46,6 @@ public class Like extends AbstractCondition {
 		else if(!(wild_token.charAt(0) =='%') && wild_token.charAt(len-1) == '%')
 		{
 //			Wildcard implementation of XXXX%
-//			System.out.println("At the end");
-//			System.out.println(wild_token.substring(0,wild_token.indexOf('%')));
-//			System.out.println(field_value.substring(0,field_value.length()));
-			System.out.println("chopped:"+ field_value.substring(0,wild_token.substring(0,wild_token.indexOf('%')).length()));
 
 			result = wild_token.substring(0,wild_token.indexOf('%')).equals
 					(
@@ -65,19 +54,13 @@ public class Like extends AbstractCondition {
 		}
 		else if ((wild_token.charAt(len-1) == '%') &&(wild_token.charAt(0) =='%') )
 		{
-			System.out.println("Came to final wildcard");
-			wild_token =wild_token.substring(1,wild_token.length()-1);
-			System.out.println("wild_token: "+wild_token);
-			System.out.println("filed value: "+field_value);
+//			System.out.println("Came to final wildcard"); using REGEX
 			Pattern p = Pattern.compile(wild_token);
 			Matcher m = p.matcher(field_value);
 			result = m.find();
-			System.out.println("regex:"+ result);
-
+//			System.out.println("regex:"+ result);
 		}
-
 		return result;
-
 	}
 
 

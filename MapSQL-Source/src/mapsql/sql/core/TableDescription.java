@@ -1,4 +1,6 @@
 package mapsql.sql.core;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TableDescription {
 	private String name;
@@ -56,6 +58,41 @@ public class TableDescription {
 	 * @throws SQLException 
 	 */
 	public void checkForNotNulls(String[] cols) throws SQLException {
+		Set<String> not_null_columns
+				= new HashSet<String>();
+		Set<String> not_null_columns_query
+				= new HashSet<String>();
+		String message ="";
+		System.out.println("came to checkForNotNulls Line 1");
+		for (String columns :cols){
+//			System.out.println("Columns:"+columns);
+//			System.out.println();
+			if(findField(columns).isNotNull()){
+				not_null_columns_query.add(columns);
+			}
+		}
+
+		System.out.println("getting all table coumns:");
+		cols = new String[fields.length];
+//		get all not null column into a set to do intersection ops
+		for (int i=0;i<fields.length;i++) {
+			cols[i] = fields[i].name();
+			if(findField(cols[i]).isNotNull()){
+				not_null_columns.add(cols[i]);
+				message = message + cols[i] +",";
+			}
+		}
+		int null_element_count = not_null_columns.size();
+		not_null_columns_query.retainAll(not_null_columns);
+		int null_element_query_count = not_null_columns_query.size();
+
+		if(null_element_count != null_element_query_count){
+			throw new SQLException("Missing Value for Not Null Field: " + message.substring(0,message.length()-1));
+			
+		}
+
 	}
+
+
 
 }

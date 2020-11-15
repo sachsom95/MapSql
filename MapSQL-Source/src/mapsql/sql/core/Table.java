@@ -73,12 +73,12 @@ public class Table {
 
 		for (Row row : rows) {
 			if (row.satisfies(where, description)) {
-				System.out.println(row);
+//				System.out.println(row);
 				int i = 0;
 				for (String column : columns) {
-					System.out.println(row.get(column));
+//					System.out.println(row.get(column));
 					row.get(column);
-					row.data.put(column,values[i]);
+//					row.data.put(column,values[i]);
 					i++;
 				}
 			}
@@ -90,16 +90,27 @@ public class Table {
 		System.out.println("Printing Rows linkedlist:");
 //		    public Position<T> first();
 		Position<Row> pointer = rows.first();
-		for (Row row:rows){
-			System.out.println(row.data.values());
-			if (row.satisfies(where, description)) {
+
+		try {
+			for (Row row : rows) {
+				System.out.println(row.data.values());
+				if (row.satisfies(where, description)) {
 //				public T remove(Position<T> p);
 
-				rows.remove(pointer);
-			}else{
+					rows.remove(pointer);
+				} else {
 //				    public Position<T> next(Position<T> p);
-				pointer =rows.next(pointer);
+					pointer = rows.next(pointer);
+				}
 			}
+		}catch(Exception E)
+		{
+			System.err.println("Column not found \nmapsql>");
 		}
+
+
+
+
+
 		}
 	}

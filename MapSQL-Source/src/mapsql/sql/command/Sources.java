@@ -64,7 +64,7 @@ public class Sources implements SQLCommand {
 
 
 
-return "1";
+return "ALL queries executed";
 
 	}
 }
